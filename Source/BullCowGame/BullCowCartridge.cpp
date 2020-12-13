@@ -10,9 +10,9 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     PrintLine(TEXT("Guess the word")); // Length of characters not specified
     PrintLine(TEXT("Press enter to continue..."));
 
-    // Setting Up Game
-    HiddenWord = TEXT("uncopyrightable");
-    // Set Lives
+    InitGame(); // Setting Up Game
+
+    // Prompt Player For Guess
 
 }
 
@@ -40,4 +40,10 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     // Prompt To Play Again, Press Enter To Play Again?
     // Check User Input
     // Play Again Or Quit
+}
+
+void UBullCowCartridge::InitGame()
+{
+    HiddenWord = TEXT("uncopyrightable");
+    Lives = 4;
 }
