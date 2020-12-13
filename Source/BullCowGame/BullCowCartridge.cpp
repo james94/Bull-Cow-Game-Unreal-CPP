@@ -7,13 +7,12 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 
     // Welcoming The Player
     PrintLine(TEXT("Welcome to the Bull Cows Game"));
-    PrintLine(TEXT("Guess the word")); // Length of characters not specified
+    PrintLine(TEXT("Guess the 15 letter word")); // Magic Number
     PrintLine(TEXT("Press enter to continue..."));
 
     SetupGame();
 
     // Prompt Player For Guess
-
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -21,9 +20,17 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     ClearScreen();
 
     if(Input == HiddenWord)
+    {
         PrintLine(TEXT("You have Won!"));
+    }
     else
+    {
+        if(Input.Len() != HiddenWord.Len())
+        {
+            PrintLine(TEXT("The Hidden Word is 15 characters long, try again!")); // Magic Number
+        }
         PrintLine(TEXT("You have Lost!"));
+    }
 
     // Check If Isogram
     // Prompt To Guess Again
