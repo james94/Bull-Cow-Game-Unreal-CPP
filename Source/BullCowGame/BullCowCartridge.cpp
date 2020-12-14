@@ -14,8 +14,6 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 
 void UBullCowCartridge::OnInput(const FString &Input) // When the player hits enter
 {
-    // If Game is Over, Then do ClearScreen() and SetupGame() the game
-    // Else Checking Player Guess
     if (bGameOver)
     {
         ClearScreen();
@@ -38,6 +36,10 @@ void UBullCowCartridge::SetupGame()
     PrintLine(TEXT("You have %i number of Lives"), Lives);
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
     PrintLine(TEXT("Type in your guess. \nPress enter to continue..."));
+
+    // const TCHAR HW[] = TEXT("plums");
+    // PrintLine(TEXT("Character 1 of the hidden word is: %c"), HiddenWord[0]);
+    // PrintLine(TEXT("The 4th character of HW is: %c"), HW[3]);
 }
 
 void UBullCowCartridge::EndGame()
@@ -55,18 +57,18 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
         return;
     }
 
-    // Check If Isogram
-    // if(!IsIsogram)
-    // {
-    //     PrintLine(TEXT("No repeating letters, guess again"));
-    // }
-    // Prompt To Guess Again
-
     // Check If It Is The Right Amount of Characters
     if (Guess.Len() != HiddenWord.Len())
     {
         PrintLine(TEXT("Sorry, try guessing again! \nYou have %i lives remaining!"), Lives);
         PrintLine(TEXT("The hidden word is %i letters long"), HiddenWord.Len());
+        return;
+    }
+
+    // Check If Isogram
+    if(!IsIsogram(Guess))
+    {
+        PrintLine(TEXT("No repeating letters, guess again"));
         return;
     }
 
@@ -92,4 +94,19 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     // Prompt To Play Again, Press Enter To Play Again?
     // Check User Input
     // Play Again Or Quit
+}
+
+bool UBullCowCartridge::IsIsogram(FString Word) const
+{
+    for(int32 Index = 0; Index < Word.Len(); Index++)
+    {
+        for(int32 Comparison = Index+1; Comparison < Word.Len(); Comparison++)
+        {
+            if(Word[Index] == Word[Comparison])
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
