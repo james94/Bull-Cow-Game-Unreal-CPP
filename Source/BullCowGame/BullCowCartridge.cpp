@@ -10,11 +10,13 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     const FString WordListPath = FPaths::ProjectContentDir()/TEXT("WordLists/HiddenWordList.txt");
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
 
+    TArray<FString> ValidWords = GetValidWords(Words);
+
     SetupGame();
 
+    PrintLine(TEXT("The number of possible words is %i"), Words.Num());
+    PrintLine(TEXT("The number of valid words is: %i."), ValidWords.Num());
     PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); // Debug Line
-
-    // Prompt Player For Guess
 }
 
 void UBullCowCartridge::OnInput(const FString &Input) // When the player hits enter
@@ -38,13 +40,9 @@ void UBullCowCartridge::SetupGame()
 
     // Welcoming The Player
     PrintLine(TEXT("Welcome to the Bull Cows Game!"));
-    PrintLine(TEXT("You have %i number of Lives"), Lives);
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
+    PrintLine(TEXT("You have %i number of Lives"), Lives);
     PrintLine(TEXT("Type in your guess. \nPress enter to continue..."));
-
-    // const TCHAR HW[] = TEXT("plums");
-    // PrintLine(TEXT("Character 1 of the hidden word is: %c"), HiddenWord[0]);
-    // PrintLine(TEXT("The 4th character of HW is: %c"), HW[3]);
 }
 
 void UBullCowCartridge::EndGame()
@@ -114,4 +112,18 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
         }
     }
     return true;
+}
+
+TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+{
+    TArray<FString> ValidWords;
+
+    for(int32 Index = 0; Index < WordList.Num(); Index++)
+    {
+        if(WordList[Index].Len() >= 4 && WordList[Index].Len() <= 8 && IsIsogram(WordList[Index]))
+        {
+            ValidWords.Emplace(WordList[Index]);
+        }
+    }
+    return ValidWords;
 }
