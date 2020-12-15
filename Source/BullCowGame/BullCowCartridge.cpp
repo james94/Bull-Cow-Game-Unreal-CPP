@@ -10,6 +10,8 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     const FString WordListPath = FPaths::ProjectContentDir()/TEXT("WordLists/HiddenWordList.txt");
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
 
+    Isograms = GetValidWords(Words);
+
     SetupGame();
 }
 
@@ -28,7 +30,7 @@ void UBullCowCartridge::OnInput(const FString &Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame()
 {
-    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)];
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
     Lives = HiddenWord.Len();
     bGameOver = false;
 
