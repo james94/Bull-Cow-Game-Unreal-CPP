@@ -10,13 +10,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     const FString WordListPath = FPaths::ProjectContentDir()/TEXT("WordLists/HiddenWordList.txt");
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
 
-    TArray<FString> ValidWords = GetValidWords(Words);
-
     SetupGame();
-
-    PrintLine(TEXT("The number of possible words is %i"), Words.Num());
-    PrintLine(TEXT("The number of valid words is: %i."), ValidWords.Num());
-    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); // Debug Line
 }
 
 void UBullCowCartridge::OnInput(const FString &Input) // When the player hits enter
@@ -34,15 +28,15 @@ void UBullCowCartridge::OnInput(const FString &Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame()
 {
-    HiddenWord = TEXT("copy");
+    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)];
     Lives = HiddenWord.Len();
     bGameOver = false;
 
-    // Welcoming The Player
     PrintLine(TEXT("Welcome to the Bull Cows Game!"));
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
     PrintLine(TEXT("You have %i number of Lives"), Lives);
     PrintLine(TEXT("Type in your guess. \nPress enter to continue..."));
+    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); // Debug Line
 }
 
 void UBullCowCartridge::EndGame()
